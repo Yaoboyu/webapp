@@ -19,14 +19,14 @@ public class BookController {
 
     /**
      *
-     * @param username 用户名
+     * @param userName 用户名
      * @return 词书信息封装Result
      * @throws Exception 如果用户没有正在学的词书报异常
      */
-    @GetMapping("/{username}")
-    public Result getCurrentBook(@PathVariable String username)throws Exception{
-        log.info("查询用户{}所学词书",username);
-        return Result.success(bookService.getCurrentBook(username));
+    @GetMapping("/{userName}")
+    public Result getCurrentBook(@PathVariable String userName)throws Exception{
+        log.info("查询用户{}所学词书",userName);
+        return Result.success(bookService.getCurrentBook(userName));
     }
 
 }

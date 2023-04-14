@@ -7,9 +7,9 @@ import org.apache.ibatis.annotations.Select;
 public interface BookMapper {
     /**
      * 根据用户id查询所学词书id
-     * @param BookId 用户id
+     * @param bookId 用户id
      * @return 词书id
      */
     @Select("SELECT * from webapp.book_list where book_list.id = #{Bookid}")
-    Book GetBookByBookId(int BookId);
+    Book GetBookByBookId(int bookId);
 }

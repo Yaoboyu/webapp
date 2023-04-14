@@ -15,9 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudyController {
     @Autowired
     StudyService studyService;
-    @GetMapping("/words/{username}")
-    public Result study(@PathVariable String username){
-        log.info("用户{}想要学词",username);
-        return Result.success(studyService.getWordsByUserName(username));
+
+    /**
+     * 如果没有学剩下的就是随机出十个没学过的(词书保证匹配),如果有学剩下的就简单了直接出学剩下的
+     * @param userName 用户名
+     * @return 返回用户要学习的词组列表,
+     */
+    @GetMapping("/words/{userName}")
+    public Result study(@PathVariable String userName){
+        log.info("用户{}想要学词", userName);
+        return Result.success(studyService.getWordsByUserName(userName));
     }
 }

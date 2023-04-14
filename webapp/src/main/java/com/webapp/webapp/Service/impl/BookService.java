@@ -15,7 +15,7 @@ public class BookService implements com.webapp.webapp.Service.BookService {
     UserMapper userMapper;
 
     /**
-     *
+     * 得到用户现在所学的词书
      * @param UserName 用户名
      * @return 词书信息
      * @throws Exception
