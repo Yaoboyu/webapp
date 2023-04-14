@@ -1,5 +1,6 @@
 package com.webapp.webapp.Service.impl;
 
+import com.webapp.webapp.Exception.MyException;
 import com.webapp.webapp.Mapper.UserMapper;
 import com.webapp.webapp.Mapper.WordMapper;
 import com.webapp.webapp.Pojo.Word;
@@ -22,7 +23,7 @@ public class StudyService implements com.webapp.webapp.Service.StudyService {
      * @param UserName 用户名
      * @return 单词列表
      */
-    public List<Word> getWordsByUserName(String UserName){
+    public List<Word> getWordsByUserName(String UserName) throws Exception{
         final int size = 10; //size是设定一波学习的词组大小,我们默认是十个,但是如果说需要改这个数量的话就可以直接改size了
         int userid = userMapper.GetUserIdByUserName(UserName);//先拿到用户的id,我们这些操作基本上基于id操作的,最后一步呈现数据才是把id转成类对象
         List<Integer> list = wordMapper.getWordLearnedIdsByUserId(userid);//这是要先查一下用户是不是有学剩下的
@@ -36,6 +37,8 @@ public class StudyService implements com.webapp.webapp.Service.StudyService {
             bookWordIds.remove(i);
         //至此,bookWordIds表就只剩下纯正的没学过的单词id了,接下来就是从这些id里面随机挑十个id的单词了!
         int len = bookWordIds.size();//列表大小
+        if(len == 0) // 如果列表为空证明学完了这本书
+            throw new MyException("所有单词已经学完,请选一本新词书!");
         if(len < size)//如果说列表里面剩下的单词都不够一次呈现的话,那就直接都拿上去咯还有什么可选的
            return getWords(bookWordIds);
         /*接下来的有点难理解了,需要读明白我这段话:

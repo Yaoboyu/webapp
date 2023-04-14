@@ -10,5 +10,5 @@ public interface StudyService {
      * @param UserName 用户名
      * @return 单词词组
      */
-    public List<Word> getWordsByUserName(String UserName);
+    public List<Word> getWordsByUserName(String UserName) throws Exception;
 }

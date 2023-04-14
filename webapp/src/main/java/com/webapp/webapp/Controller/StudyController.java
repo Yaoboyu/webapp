@@ -22,7 +22,7 @@ public class StudyController {
      * @return 返回用户要学习的词组列表,
      */
     @GetMapping("/words/{userName}")
-    public Result study(@PathVariable String userName){
+    public Result study(@PathVariable String userName) throws Exception{
         log.info("用户{}想要学词", userName);
         return Result.success(studyService.getWordsByUserName(userName));
     }
