@@ -37,7 +37,7 @@ public interface UserMapper {
      * @return 用户信息
      */
     @Insert("INSERT INTO user (user_name, password, email) VALUES (#{userName}, #{password}, #{email})")
-    int InsertUser(User user);
+    void InsertUser(User user);
 
     /**
      * 根据用户名查询用户信息
