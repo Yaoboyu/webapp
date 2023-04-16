@@ -17,20 +17,15 @@ public class UserService implements com.webapp.webapp.Service.UserService{
     public User login(User user) {
         return userMapper.GetUserByUserNameAndPassword(user);
     }
+
     //注册
     @Override
     public String register(User user) {
-        String msg = "", userName = user.getUserName(), password = user.getPassword(),email = user.getEmail();
-        User registerUser = new User();
-        registerUser.setUserName(userName);
+        String msg = "", userName = user.getUserName();
         if (!checkUserNameUnique(userName))
-            msg = "保存用户'" + userName + "'失败，注册账号已存在";
+            msg = "用户名'" + userName + "'已存在";
         else
-        {
-//            registerUser.setPassword(SecurityUtils.encryptPassword(password));
-            registerUser.setPassword(password);
-            userMapper.InsertUser(registerUser);
-        }
+            userMapper.InsertUser(user);
         return msg;
     }
 

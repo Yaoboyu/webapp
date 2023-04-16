@@ -25,7 +25,7 @@ public class UserController {
     /**
      * 用户登录
      * @param user 用户信息
-     * @return 登陆成功与否的Result
+     * @return 登陆成功返回jwt, 失败返回错误信息
      */
     @PostMapping ("/login")
     public Result login(@RequestBody User user) throws Exception{
@@ -34,7 +34,6 @@ public class UserController {
         //登录成功,生成令牌,下发令牌
         if (loginUser != null){
             Map<String, Object> claims = new HashMap<>();
-            claims.put("id", loginUser.getUserId());
             claims.put("userName", loginUser.getUserName());
             String jwt = JwtUtils.generateJwt(claims);
             return Result.success(jwt);
@@ -44,17 +43,19 @@ public class UserController {
         return Result.error("用户名或密码错误");
     }
 
+    /**
+     * 用户注册
+     * @param user 用户信息
+     * @return 注册成功与否的Result
+     */
     @PostMapping("/register")
     public Result register(@RequestBody User user) throws Exception{
         log.info("用户{}注册",user.getUserName());
         String msg = userService.register(user);
-        if (StringUtils.isEmpty(msg)){
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("id", user.getUserId());
-            claims.put("userName", user.getUserName());
-            String jwt = JwtUtils.generateJwt(claims);
-            return Result.success(jwt);
-        }
+        //注册成功
+        if (StringUtils.isEmpty(msg))
+            return Result.success();
+        //注册失败,返回错误信息
         return Result.error(msg);
     }
 }
