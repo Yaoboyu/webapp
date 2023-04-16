@@ -12,5 +12,5 @@ public interface StudyService {
      */
     public List<Word> getWordsByUserName(String UserName) throws Exception;
 
-    void updateWordStatus(String userName, int wordId, int status) throws Exception;
+    void updateWordStatus(String userName, Integer wordId, Integer status) throws Exception;
 }

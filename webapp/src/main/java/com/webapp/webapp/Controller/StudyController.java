@@ -32,7 +32,7 @@ public class StudyController {
      * @return
      */
     @PutMapping("/words")
-    public Result updateWordStatus(@RequestParam String userName, @RequestParam int wordId, @RequestParam int status) throws Exception{
+    public Result updateWordStatus(@RequestParam String userName, @RequestParam Integer wordId, @RequestParam Integer status) throws Exception{
         log.info("更新用户{}单词{}的状态为{}", userName, wordId, status);
         studyService.updateWordStatus(userName, wordId, status);
         return Result.success();

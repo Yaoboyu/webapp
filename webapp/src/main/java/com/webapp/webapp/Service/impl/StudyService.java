@@ -62,6 +62,8 @@ public class StudyService implements com.webapp.webapp.Service.StudyService {
         return getWords(index);//拿下!
     }
 
+
+
     /**
      * 通过用户名和单词id更新单词状态
      * @param userName 用户名
@@ -69,8 +71,8 @@ public class StudyService implements com.webapp.webapp.Service.StudyService {
      * @param status 状态
      */
     @Override
-    public void updateWordStatus(String userName, int wordId, int status) throws Exception {
-        int userId = userMapper.GetUserIdByUserName(userName);
+    public void updateWordStatus(String userName, Integer wordId, Integer status) throws Exception {
+        Integer userId = userMapper.GetUserIdByUserName(userName);
         wordMapper.updateWordStatus(userId,wordId,status);
     }
 
