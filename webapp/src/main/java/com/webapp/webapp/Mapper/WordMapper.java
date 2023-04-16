@@ -1,8 +1,10 @@
 package com.webapp.webapp.Mapper;
 
 import com.webapp.webapp.Pojo.Word;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -39,4 +41,13 @@ public interface WordMapper {
      */
     @Select("select word_id from webapp.book_word where book_id = #{bookId} and word_id is not null")
     List<Integer> getWordByBookId(int bookId);
+
+    /**
+     * 更新单词状态
+     * @param userId 用户id
+     * @param wordId 单词id
+     * @param status 状态
+     */
+    @Update("update user_word set status = #{status} where user_id = #{userId} and word_id = #{wordId}")
+    void updateWordStatus(int userId, int wordId, int status);
 }

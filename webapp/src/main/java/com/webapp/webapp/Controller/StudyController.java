@@ -4,10 +4,7 @@ import com.webapp.webapp.Pojo.Result;
 import com.webapp.webapp.Service.impl.StudyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -25,5 +22,19 @@ public class StudyController {
     public Result study(@PathVariable String userName) throws Exception{
         log.info("用户{}想要学词", userName);
         return Result.success(studyService.getWordsByUserName(userName));
+    }
+
+    /**
+     * 更新单词状态
+     * @param userName 用户名
+     * @param wordId 单词id
+     * @param status 状态
+     * @return
+     */
+    @PutMapping("/words")
+    public Result updateWordStatus(@RequestParam String userName, @RequestParam int wordId, @RequestParam int status) throws Exception{
+        log.info("更新用户{}单词{}的状态为{}", userName, wordId, status);
+        studyService.updateWordStatus(userName, wordId, status);
+        return Result.success();
     }
 }

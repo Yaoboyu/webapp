@@ -63,6 +63,18 @@ public class StudyService implements com.webapp.webapp.Service.StudyService {
     }
 
     /**
+     * 通过用户名和单词id更新单词状态
+     * @param userName 用户名
+     * @param wordId 单词id
+     * @param status 状态
+     */
+    @Override
+    public void updateWordStatus(String userName, int wordId, int status) throws Exception {
+        int userId = userMapper.GetUserIdByUserName(userName);
+        wordMapper.updateWordStatus(userId,wordId,status);
+    }
+
+    /**
      * 根据一个word_id列表查询所有这个列表里面id对应的单词
      * @param list 单词的id列表
      * @return 返回单词的列表

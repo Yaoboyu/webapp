@@ -11,4 +11,6 @@ public interface StudyService {
      * @return 单词词组
      */
     public List<Word> getWordsByUserName(String UserName) throws Exception;
+
+    void updateWordStatus(String userName, int wordId, int status) throws Exception;
 }
