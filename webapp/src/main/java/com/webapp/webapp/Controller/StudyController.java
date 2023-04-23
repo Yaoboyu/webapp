@@ -37,4 +37,26 @@ public class StudyController {
         studyService.updateWordStatus(userName, wordId, status);
         return Result.success();
     }
+
+    /**
+     * 根据单词原型查询对应例句(包含中文翻译)
+     * @param word 单词字符串
+     * @return 单词例句
+     */
+    @GetMapping("/sentence/{word}")
+    public Result wordSentence(@PathVariable String word){
+        log.info("查询单词{}例句",word);
+        return Result.success(studyService.wordSentence(word));
+    }
+
+    /**
+     * 根据单词原型返回详情页(html格式需要前端手动添加dom元素)
+     * @param word 单词原型
+     * @return 单词详细释义
+     */
+    @GetMapping("/detail/{word}")
+    public Result wordDeatil(@PathVariable String word){
+        log.info("查询单词{}详细释义",word);
+        return Result.success(studyService.wordDetail(word));
+    }
 }

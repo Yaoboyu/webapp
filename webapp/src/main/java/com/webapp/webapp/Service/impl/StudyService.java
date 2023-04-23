@@ -1,9 +1,11 @@
 package com.webapp.webapp.Service.impl;
 
+import com.webapp.webapp.Dto.WordSentence;
 import com.webapp.webapp.Exception.MyException;
 import com.webapp.webapp.Mapper.UserMapper;
 import com.webapp.webapp.Mapper.WordMapper;
 import com.webapp.webapp.Pojo.Word;
+import com.webapp.webapp.Utils.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,5 +88,13 @@ public class StudyService implements com.webapp.webapp.Service.StudyService {
         for(int i : list)
             ans.add(wordMapper.getWordById(i));
         return ans;
+    }
+    public WordSentence wordSentence(String word){
+        return WordUtils.serch(word);
+    }
+
+    @Override
+    public String wordDetail(String word) {
+        return WordUtils.wordDetail(word);
     }
 }

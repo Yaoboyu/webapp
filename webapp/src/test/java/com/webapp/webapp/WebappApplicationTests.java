@@ -1,14 +1,12 @@
 package com.webapp.webapp;
 
+import com.webapp.webapp.Utils.WordUtils;
 import org.junit.jupiter.api.Test;
 
 import javax.annotation.Resource;
 
 class WebappApplicationTests {
-    @Resource
-    private StudyMapper studyMapper;
-    @Test
-    public void test(){
-        System.out.println(studyMapper.AllWordsId());
+    public static void main(String[] args) {
+        System.out.println(WordUtils.wordDetail("brand"));
     }
 }
