@@ -10,16 +10,22 @@
     <button id = "detail">模拟不会按钮</button>
     <button id = "sentence">模拟模糊按钮</button>
     <button id = "select">模拟查询按钮</button>
+    <button id = "start">开始学习单词</button>
+    <button id = "get">会这个单词😊</button>
     <div id = "word"></div>
+    <div id = "plan"></div>
     <script>
       var userName = "yaoboyu";//用户名
       var password = "yaoboyu";//密码
-      var wordLists;//单词列表存放10个待学习单词
-      var token = "null";//登录令牌,默认为空
+      var wordList;//单词列表存放10个待学习单词
+      var token = "";//登录令牌,默认为空
       var word = "apple";//当前学习的单词
       var sentence;//单词例句
       var detail;//详情页
       var book;//词书
+      var len;//单词列表长度
+      var index = 0;//单词索引
+      var tmp = [];//已经学习的单词表
       axios.defaults.baseURL = "http://localhost:8080";
       axios.interceptors.response.use(function (response) {
           // 2xx 范围内的状态码都会触发该函数。
@@ -28,7 +34,7 @@
           return response;
         }, function (error) {
           // 超出 2xx 范围的状态码都会触发该函数。
-          alert("服务器异常");
+          alert("服务器异常🤢");
         });
       //登录接口实现
       $("#login").click(function(){
@@ -52,7 +58,7 @@
         axios({
           method:"GET",
           headers:{token:token},
-          url:"/book/" + userName,
+          url:"/book",
         }).then(response=>{
           book = response.data.data.title;
           console.log("获取要学习的词书" + book);
@@ -64,10 +70,11 @@
         axios({
           method:"GET",
           headers:{token:token},
-          url:"/study/words/" + userName,
+          url:"/study/words",
         }).then(response=>{
-          wordLists = response.data.data;
-          console.log("获取要学习的单词列表" + wordLists);
+          wordList = response.data.data;
+          len = wordList.length;
+          console.log("获取要学习的单词列表" + len + "个单词");
         })
       })
       //选择不会之后查询单词详情页接口
@@ -82,6 +89,11 @@
           $("#word").html(detail);
           console.log("展示详情页");
         })
+        do{
+          index = (index + 1) % len;
+        }
+        while(tmp.indexOf(wordList[index].word) != -1);
+        $("#start").html("看答案懂了😡不算学完,一会再学一遍");
       })
       //选择模糊之后查看例句
       $("#sentence").click(function(){
@@ -94,8 +106,32 @@
           detail = response.data.data.sentence;
           $("#word").html(detail);
           console.log("展示例句");
-        })
+        })            
+        $("#start").html("还是不会?(死了得了~😔)");
+        $("#get").html("通过提示掌握,也算拿下!👿");
       })
+      //循环展示单词模式
+      $("#start").click(function(){
+          word = wordList[index].word;
+          $("#start").html("开始学习之后这个按钮没用");
+          $("#get").html("会这个单词😊");
+          $("#word").html(word);
+          $("#plan").html("已经学会单词" + tmp.length + "/" + len);
+        }
+      )
+      $("#get").click(function(){
+        tmp.push(word);
+        $("#plan").html("已经学会单词" + tmp.length + "/" + len);
+        if(len == tmp.length){
+          alert("学完力!😘");
+          return;
+        }
+          while(tmp.indexOf(wordList[index].word) != -1)
+            index = (index + 1) % len;
+          word = wordList[index].word;
+          $("#word").html(word);
+        }
+      )
     </script>
   </body>
 </html>
