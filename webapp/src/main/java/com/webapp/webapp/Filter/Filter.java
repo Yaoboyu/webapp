@@ -3,6 +3,7 @@ package com.webapp.webapp.Filter;
 import com.webapp.webapp.Pojo.Result;
 import com.webapp.webapp.Utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
  * 请求过滤器
@@ -32,10 +34,14 @@ public class Filter implements javax.servlet.Filter {
             chain.doFilter(request,response);
             return;
         }
-
+        if (HttpMethod.OPTIONS.toString().equals(req.getMethod())) {
+            System.out.println("OPTIONS请求，放行");
+            chain.doFilter(request,response);
+            return;
+        }
         //3.获取请求头中的令牌（token）。
         String jwt = req.getHeader("token");
-
+        String u = req.getHeader("User-Agent");
         //4.判断令牌是否存在，如果不存在，返回错误结果（未登录）。
         if(!StringUtils.hasLength(jwt)){
             log.info("请求头token为空,返回未登录的信息");

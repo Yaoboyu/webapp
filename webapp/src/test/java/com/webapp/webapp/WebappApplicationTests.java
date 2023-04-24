@@ -8,5 +8,6 @@ import javax.annotation.Resource;
 class WebappApplicationTests {
     public static void main(String[] args) {
         System.out.println(WordUtils.wordDetail("brand"));
+
     }
 }

@@ -20,7 +20,7 @@ public class JwtUtils {
         String jwt = Jwts.builder()
                 .addClaims(claims)
                 .signWith(SignatureAlgorithm.HS256, signKey)
-                .setExpiration(new Date(System.currentTimeMillis() / 1000 + expire))
+                .setExpiration(new Date(System.currentTimeMillis() + expire))
                 .compact();
         return jwt;
     }
