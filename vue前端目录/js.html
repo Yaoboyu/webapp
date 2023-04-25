@@ -43,7 +43,7 @@
         axios({
           headers:{token:token},
           method:"POST",
-          url:"/user/login",
+          url:"/users/login",
           data:{
             userName:userName,
             password:password,
@@ -59,7 +59,7 @@
         axios({
           method:"GET",
           headers:{token:token},
-          url:"/book",
+          url:"/books",
         }).then(response=>{
           book = response.data.data.title;
           console.log("获取要学习的词书" + book);
@@ -107,7 +107,7 @@
           detail = response.data.data.sentence;
           $("#word").html(detail);
           console.log("展示例句");
-        })            
+        })
         $("#start").html("还是不会?(死了得了~😔)");
         $("#get").html("通过提示掌握,也算拿下!👿");
       })
@@ -138,14 +138,14 @@
         axios({
           method:"PUT",
           headers:{token:token},
-          url:"/study/word",
+          url:"/study/words",
           params:{
             wordId:wordList[index].id,
             status:1
           }
         }).then(response=>{
           console.log("单词状态已经更新");
-        }) 
+        })
       }
     </script>
   </body>
