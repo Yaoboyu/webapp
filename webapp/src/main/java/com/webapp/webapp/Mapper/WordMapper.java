@@ -16,7 +16,7 @@ public interface WordMapper {
      * @return 用户学剩下的词组id列表
      */
     @Select("select word_id from webapp.user_word where user_id = #{userId} and status = 0")
-    List<Integer> getWordLearnedIdsByUserId(int userId);
+    List<Integer> getWordLearnedIdsByUserId(long userId);
 
     /**
      * 根据id查单词(一对一查辣,很简单的逻辑)
@@ -32,7 +32,7 @@ public interface WordMapper {
      * @return 用户学过的单词id列表
      */
     @Select("select word_id from webapp.user_word where user_id = #{userId}")
-    List<Integer> getWordCompletedByUserId(int userId);
+    List<Integer> getWordCompletedByUserId(long userId);
 
     /**
      * 根据书id查询这本书的单词(有特殊的情况是有些书下的单词竟然没有id?所以必须排除,不然全是null😡);
@@ -40,7 +40,7 @@ public interface WordMapper {
      * @return 这本书的单词id列表
      */
     @Select("select word_id from webapp.book_word where book_id = #{bookId} and word_id is not null")
-    List<Integer> getWordByBookId(int bookId);
+    List<Integer> getWordByBookId(long bookId);
 
     /**
      * 更新单词状态
@@ -49,5 +49,5 @@ public interface WordMapper {
      * @param status 状态
      */
     @Update("update user_word set status = #{status} where user_id = #{userId} and word_id = #{wordId}")
-    void updateWordStatus(int userId, int wordId, int status);
+    void updateWordStatus(long userId, int wordId, int status);
 }

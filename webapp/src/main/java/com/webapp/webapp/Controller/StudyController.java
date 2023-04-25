@@ -15,26 +15,24 @@ public class StudyController {
 
     /**
      * 如果没有学剩下的就是随机出十个没学过的(词书保证匹配),如果有学剩下的就简单了直接出学剩下的
-     * @param userName 用户名
      * @return 返回用户要学习的词组列表,
      */
-    @GetMapping("/words/{userName}")
-    public Result study(@PathVariable String userName) throws Exception{
-        log.info("用户{}想要学词", userName);
-        return Result.success(studyService.getWordsByUserName(userName));
+    @GetMapping("/words")
+    public Result study() throws Exception{
+        log.info("用户想要学词");
+        return Result.success(studyService.getWordsByUserName());
     }
 
     /**
      * 更新单词状态
-     * @param userName 用户名
      * @param wordId 单词id
      * @param status 状态
      * @return
      */
     @PutMapping("/words")
-    public Result updateWordStatus(@RequestParam String userName, @RequestParam Integer wordId, @RequestParam Integer status) throws Exception{
-        log.info("更新用户{}单词{}的状态为{}", userName, wordId, status);
-        studyService.updateWordStatus(userName, wordId, status);
+    public Result updateWordStatus(@RequestParam Integer wordId, @RequestParam Integer status) throws Exception{
+        log.info("更新用户单词{}的状态为{}", wordId, status);
+        studyService.updateWordStatus(wordId, status);
         return Result.success();
     }
 

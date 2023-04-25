@@ -2,10 +2,11 @@ package com.webapp.webapp.Utils;
 
 import cn.hutool.http.HttpUtil;
 import com.webapp.webapp.Dto.WordSentence;
+import org.jetbrains.annotations.TestOnly;
 
 public class WordUtils {
     //这个我自己写的比较乱了总之返回的是单词的例句和翻译
-    public static WordSentence serch(String word) {
+    public static WordSentence serch(String word) throws Exception{
         //发送get请求
         String s = HttpUtil.createGet("https://dict.hjenglish.com/w/" + word)
                 //这个请求头.header是自己项目需要加的，可以省略

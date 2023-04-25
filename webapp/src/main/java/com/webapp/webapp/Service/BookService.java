@@ -9,5 +9,5 @@ public interface BookService {
      * @return 返回所学的书类对象
      * @throws Exception 可能没学书就返回没学的异常
      */
-    Book getCurrentBook(String UserName) throws Exception;
+    Book getCurrentBook() throws Exception;
 }

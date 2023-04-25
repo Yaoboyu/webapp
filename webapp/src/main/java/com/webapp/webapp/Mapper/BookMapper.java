@@ -11,5 +11,5 @@ public interface BookMapper {
      * @return 词书id
      */
     @Select("SELECT * from webapp.book_list where book_list.id = #{Bookid}")
-    Book GetBookByBookId(int bookId);
+    Book GetBookByBookId(long bookId);
 }

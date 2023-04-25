@@ -21,7 +21,7 @@ public interface UserMapper {
      * @return 所学词书id
      */
     @Select("SELECT book_id from user_book where user_book.user_id = #{userId} and status = 1")
-    Integer GetBookIdByUserId(int userId);
+    Long GetBookIdByUserId(long userId);
 
     /**
      * 根据用户名及密码查询用户信息
