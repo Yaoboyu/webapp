@@ -1,5 +1,6 @@
 <html>
   <head>
+    <meta http-equiv="Content-Type" content="textml; charset=utf-8" />
     <title>dassdaa</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.3.6/axios.js"></script>
@@ -120,6 +121,7 @@
         }
       )
       $("#get").click(function(){
+        grasp(index);
         tmp.push(word);
         $("#plan").html("已经学会单词" + tmp.length + "/" + len);
         if(len == tmp.length){
@@ -132,6 +134,19 @@
           $("#word").html(word);
         }
       )
+      function grasp(index){
+        axios({
+          method:"PUT",
+          headers:{token:token},
+          url:"/study/word",
+          params:{
+            wordId:wordList[index].id,
+            status:1
+          }
+        }).then(response=>{
+          console.log("单词状态已经更新");
+        }) 
+      }
     </script>
   </body>
 </html>
