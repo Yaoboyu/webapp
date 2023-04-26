@@ -7,17 +7,15 @@ import com.webapp.webapp.Utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+
 @RestController
 @Slf4j
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     UserService userService;
@@ -32,13 +30,15 @@ public class UserController {
         log.info("用户{}登录",user.getUserName());
         User loginUser = userService.login(user);
         //登录成功,生成令牌,下发令牌
-        if (loginUser != null){
+        if (loginUser != null) {
             Map<String, Object> claims = new HashMap<>();
             claims.put("userName", loginUser.getUserName());
+            claims.put("password", loginUser.getPassword());
+            claims.put("id", loginUser.getId());
+            claims.put("email", loginUser.getEmail());
             String jwt = JwtUtils.generateJwt(claims);
             return Result.success(jwt);
         }
-
         //登录失败, 返回错误信息
         return Result.error("用户名或密码错误");
     }

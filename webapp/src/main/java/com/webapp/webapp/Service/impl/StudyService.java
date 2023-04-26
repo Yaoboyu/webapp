@@ -1,5 +1,6 @@
 package com.webapp.webapp.Service.impl;
 
+import com.webapp.webapp.Config.ThreadLocalConfig;
 import com.webapp.webapp.Dto.WordSentence;
 import com.webapp.webapp.Exception.MyException;
 import com.webapp.webapp.Mapper.UserMapper;
@@ -22,18 +23,18 @@ public class StudyService implements com.webapp.webapp.Service.StudyService {
 
     /**
      * ok大的要来辣,通过用户名得到用户应该学的随机单词,有学剩下的优先
-     * @param UserName 用户名
+     * @param
      * @return 单词列表
      */
-    public List<Word> getWordsByUserName(String UserName) throws Exception{
+    public List<Word> getWordsByUserName() throws Exception{
         final int size = 10; //size是设定一波学习的词组大小,我们默认是十个,但是如果说需要改这个数量的话就可以直接改size了
-        int userid = userMapper.GetUserIdByUserName(UserName);//先拿到用户的id,我们这些操作基本上基于id操作的,最后一步呈现数据才是把id转成类对象
+        long userid = ThreadLocalConfig.getUser().getId();//先拿到用户的id,我们这些操作基本上基于id操作的,最后一步呈现数据才是把id转成类对象
         List<Integer> list = wordMapper.getWordLearnedIdsByUserId(userid);//这是要先查一下用户是不是有学剩下的
         if(list.size() > 0)
             return getWords(list);//有学剩下的就好办了直接把id列表转换成词组列表返回了
         else
             list = wordMapper.getWordCompletedByUserId(userid); //没有学剩下的,那我就去拿他已经学过的单词id列表,方便后续排除掉这些学过的
-        int bookid = userMapper.GetBookIdByUserId(userid);//根据用户id查他现学的词书id
+        long bookid = userMapper.GetBookIdByUserId(userid);//根据用户id查他现学的词书id
         List<Integer> bookWordIds = wordMapper.getWordByBookId(bookid);//通过词书id查到词书下单词id列表
         for(int i : list)//上一步查到的单词列表只是这本书的所有单词对吧?那这些单词既有用户学过的,也有没学过的,这个for循环就是排除掉学过的只剩下没学的
             bookWordIds.remove(i);
@@ -68,13 +69,12 @@ public class StudyService implements com.webapp.webapp.Service.StudyService {
 
     /**
      * 通过用户名和单词id更新单词状态
-     * @param userName 用户名
      * @param wordId 单词id
      * @param status 状态
      */
     @Override
-    public void updateWordStatus(String userName, Integer wordId, Integer status) throws Exception {
-        Integer userId = userMapper.GetUserIdByUserName(userName);
+    public void updateWordStatus(Integer wordId, Integer status) throws Exception {
+        long userId = ThreadLocalConfig.getUser().getId();
         wordMapper.updateWordStatus(userId,wordId,status);
     }
 
@@ -90,7 +90,11 @@ public class StudyService implements com.webapp.webapp.Service.StudyService {
         return ans;
     }
     public WordSentence wordSentence(String word){
-        return WordUtils.serch(word);
+        try {
+            return WordUtils.serch(word);
+        } catch (Exception e) {
+            throw new MyException("该单词无例句!");
+        }
     }
 
     @Override
