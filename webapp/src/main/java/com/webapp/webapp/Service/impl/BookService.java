@@ -23,10 +23,55 @@ public class BookService implements com.webapp.webapp.Service.BookService {
     @Override
     public Book getCurrentBook() throws Exception{
         User user = ThreadLocalConfig.getUser();
-        long userId = user.getUserId();
+        long userId = user.getId();
         Long bookId = userMapper.GetBookIdByUserId(userId);
         if(bookId == null)
             return null;
         return bookMapper.GetBookByBookId(bookId);
+    }
+
+    /**
+     * 更新词书状态
+     * @param bookId 词书id
+     * @param status 状态
+     */
+    @Override
+    public void updateBookStatus(Integer bookId, Integer status) {
+        User user = ThreadLocalConfig.getUser();
+        long userId = user.getId();
+        bookMapper.UpdateBookStatus(userId, bookId, status);
+    }
+
+    /**
+     * 判断用户是否已经有词书
+     * @param bookId 词书id
+     * @return
+     */
+    @Override
+    public boolean ifBookAdded(Integer bookId) {
+        User user = ThreadLocalConfig.getUser();
+        long userId = user.getId();
+        return bookMapper.GetBookByUserId(userId, bookId);
+    }
+
+    /**
+     * 判断词书是否存在
+     * @param bookId 词书id
+     * @return
+     */
+    @Override
+    public boolean ifBookExisted(Integer bookId) {
+        return bookMapper.GetBookByBookId(bookId) != null;
+    }
+
+    /**
+     * 用户添加词书
+     * @param bookId 词书id
+     */
+    @Override
+    public void addBook(Integer bookId) {
+        User user = ThreadLocalConfig.getUser();
+        long userId = user.getId();
+        bookMapper.InsertUserBook(userId, bookId);
     }
 }

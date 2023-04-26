@@ -12,7 +12,7 @@ public interface UserMapper {
      * @param userName 用户名
      * @return 用户id
      */
-    @Select("SELECT user_id  from user where user_name = #{userName}")
+    @Select("SELECT id  from user where user_name = #{userName}")
     int GetUserIdByUserName(String userName);
 
     /**
@@ -20,7 +20,7 @@ public interface UserMapper {
      * @param userId 用户id
      * @return 所学词书id
      */
-    @Select("SELECT book_id from user_book where user_book.user_id = #{userId} and status = 1")
+    @Select("SELECT book_id from user_book where user_id = #{userId} and status = 1")
     Long GetBookIdByUserId(long userId);
 
     /**

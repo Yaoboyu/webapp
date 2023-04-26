@@ -28,7 +28,7 @@ public class StudyService implements com.webapp.webapp.Service.StudyService {
      */
     public List<Word> getWordsByUserName() throws Exception{
         final int size = 10; //size是设定一波学习的词组大小,我们默认是十个,但是如果说需要改这个数量的话就可以直接改size了
-        long userid = ThreadLocalConfig.getUser().getUserId();//先拿到用户的id,我们这些操作基本上基于id操作的,最后一步呈现数据才是把id转成类对象
+        long userid = ThreadLocalConfig.getUser().getId();//先拿到用户的id,我们这些操作基本上基于id操作的,最后一步呈现数据才是把id转成类对象
         List<Integer> list = wordMapper.getWordLearnedIdsByUserId(userid);//这是要先查一下用户是不是有学剩下的
         if(list.size() > 0)
             return getWords(list);//有学剩下的就好办了直接把id列表转换成词组列表返回了
@@ -74,7 +74,7 @@ public class StudyService implements com.webapp.webapp.Service.StudyService {
      */
     @Override
     public void updateWordStatus(Integer wordId, Integer status) throws Exception {
-        long userId = ThreadLocalConfig.getUser().getUserId();
+        long userId = ThreadLocalConfig.getUser().getId();
         wordMapper.updateWordStatus(userId,wordId,status);
     }
 

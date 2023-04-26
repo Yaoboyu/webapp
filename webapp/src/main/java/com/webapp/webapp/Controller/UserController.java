@@ -34,7 +34,7 @@ public class UserController {
             Map<String, Object> claims = new HashMap<>();
             claims.put("userName", loginUser.getUserName());
             claims.put("password", loginUser.getPassword());
-            claims.put("userId", loginUser.getUserId());
+            claims.put("id", loginUser.getId());
             claims.put("email", loginUser.getEmail());
             String jwt = JwtUtils.generateJwt(claims);
             return Result.success(jwt);

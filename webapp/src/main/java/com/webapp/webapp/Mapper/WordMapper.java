@@ -15,7 +15,7 @@ public interface WordMapper {
      * @param userId 用户id
      * @return 用户学剩下的词组id列表
      */
-    @Select("select word_id from webapp.user_word where user_id = #{userId} and status = 0")
+    @Select("select word_id from user_word where user_id = #{userId} and status = 0")
     List<Integer> getWordLearnedIdsByUserId(long userId);
 
     /**
@@ -23,7 +23,7 @@ public interface WordMapper {
      * @param id 这是单词的id,对不起我偷懒了:)
      * @return 单词的类对象
      */
-    @Select("select * from webapp.word where webapp.word.id = #{id}")
+    @Select("select * from word where word.id = #{id}")
     Word getWordById(int id);
 
     /**
@@ -31,7 +31,7 @@ public interface WordMapper {
      * @param userId 用户id
      * @return 用户学过的单词id列表
      */
-    @Select("select word_id from webapp.user_word where user_id = #{userId}")
+    @Select("select word_id from user_word where user_id = #{userId}")
     List<Integer> getWordCompletedByUserId(long userId);
 
     /**
@@ -39,7 +39,7 @@ public interface WordMapper {
      * @param bookId 词书id
      * @return 这本书的单词id列表
      */
-    @Select("select word_id from webapp.book_word where book_id = #{bookId} and word_id is not null")
+    @Select("select word_id from book_word where book_id = #{bookId} and word_id is not null")
     List<Integer> getWordByBookId(long bookId);
 
     /**

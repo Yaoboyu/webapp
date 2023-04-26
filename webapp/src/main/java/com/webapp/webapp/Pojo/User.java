@@ -21,7 +21,7 @@ public class User {
     /**
      * 用户id，自增主键
      */
-    private long userId;
+    private long id;
     /**
      * 用户名
      */
