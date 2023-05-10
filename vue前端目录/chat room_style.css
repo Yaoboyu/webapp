@@ -6,8 +6,8 @@ body {
   }
   
   header {
-    background-color: #4CAF50;
-    color: #fff;
+    background-color: #17a589;
+    color: #ffffff;
     padding: 10px;
     text-align: center;
   }
@@ -43,11 +43,11 @@ body {
   }
   
   button[type="submit"] {
-    background-color: #4CAF50;
-    color: #fff;
+    background-color: #17a589;
+    color: #ffffff;
     border: none;
     border-radius: 5px;
     padding: 10px 20px;
     cursor: pointer;
   }
-  
+
