@@ -1,0 +1,1 @@
+window.setTimeout("window.location='../html/login.html'",1000);

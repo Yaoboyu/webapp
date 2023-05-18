@@ -1,0 +1,12 @@
+  .conter{
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);    /* 50%为自身尺寸的一半 */
+  }
+  .body {
+    background-image: url("../picture/bg2.png");
+    min-height: 100%;
+   background-size : cover; 
+   background-attachment: fixed;
+   background-repeat:no-repeat;
+  }
+  
