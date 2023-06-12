@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>词书管理</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-left: auto;
+            padding-right: auto;
+        }
+
+        .shop_container {
+            height: calc(92%);
+            width: 100%;
+            padding-top: 10px;
+            padding-left: auto;
+            padding-right: auto;
+        }
+
+        .roleListContainer {
+            height: 100%;
+            width: 100%;
+        }
+
+        .pageList {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .col-md-3 {
+            width: 25%;
+            float: left;
+        }
+
+        .book {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            height: 230px;
+            width: 220px;
+            margin-left: calc(50% - 110px);
+        }
+
+        .book-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .book-text {
+            text-align: center;
+        }
+        .book-img {
+            text-align: center;
+            width: 100px;
+            height: 100px;
+            border:5px solid wheat;
+        }
+
+        .el-pagination {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .item.avatar {
+            width: 100px;
+            height: 100px;
+        }
+
+        .book:nth-child(4n) {
+            margin-right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="js/sakura.js"></script>
+    <div class="title">
+        <h1 align="center">词书管理</h1>
+    </div>
+    <div class="container">
+        <div class="shop_container">
+            <div id="app">
+                <div class="row">
+                    <div class="col-md-3" v-for="item in items" :key="item.id">
+                        <div class="book">
+                            <div class="book-body">
+                                <p class="book-text">{{ item.text }}</p>
+                                <img :src="item.img" class="book-img"/>
+                                <a href="#" class="btn btn-primary" v-on:click="handleClick">去学习</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pageList">
+                    <span>共 {{ counts }} 条</span>
+                    <el-select v-model="pageSize" size="small" @change="handleSizeChange">
+                        <el-option v-for="size in [10, 20, 30, 40]" :key="size" :label="size + '条/页'"
+                            :value="size"></el-option>
+                    </el-select>
+                    <el-pagination :page-size="pageSize" :current-page.sync="page"
+                        @current-change="handleCurrentChange"></el-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>const Header = {
+            template: '<div class="header"></div>'
+        };
+
+        var app = new Vue({
+            el: '#app',
+            components: {
+                Header
+            },
+            data() {
+                return {
+                    counts: 8,
+                    roleList: [],
+                    page: 1,
+                    pageSize: 10,
+                    counts: 0,
+                    name: '',
+                    type: null,
+                    items: [
+                        { id: 1, text: 'book 1', img:"" },
+                        { id: 2, text: 'book 2', img:"" },
+                        { id: 3, text: 'book 3', img:"" },
+                        { id: 4, text: 'book 4', img:"" },
+                        { id: 5, text: 'book 5', img:"" },
+                        { id: 6, text: 'book 6', img:"" },
+                        { id: 7, text: 'book 7', img:"" },
+                        { id: 8, text: 'book 8', img:"" }
+                    ]
+                }
+            },
+            created() {
+                this.getRoleList()
+            },
+            methods: {
+                handleQuery() {
+                    this.page = 1
+                    this.getRoleList()
+                },
+
+                handleSizeChange(val) {
+                    this.pageSize = val
+                    this.getRoleList()
+                },
+                handleCurrentChange(val) {
+                    this.page = val
+                    this.getRoleList()
+                },
+                handleClick() {
+                    // 在这里写你想要执行的逻辑
+                    alert("你点击了按钮");
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>

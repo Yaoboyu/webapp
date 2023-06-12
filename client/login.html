@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.3.6/axios.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="photo/logo.png">
+  <title>登录到Webapp</title>
+  <style>
+    body {
+  background-color: #f5f5f5;
+}
+ 
+.login-container {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  margin: 100px auto;
+  max-width: 500px;
+  padding: 40px;
+}
+ 
+h2 {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+ 
+form {
+  display: flex;
+  flex-direction: column;
+}
+ 
+label {
+  color: #666;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+ 
+input[type="text"],
+input[type="password"] {
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+ 
+button{
+  background-color: #333;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 14px;
+  transition: background-color 0.3s ease;
+}
+ 
+button[type="submit"]:hover {
+  background-color: #555;
+}
+  </style>
+</head>
+<body>
+<head>
+    <title>登陆页面</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+ 
+<body>
+    <div class="login-container">
+        <h2>欢迎登录</h2>
+        <form>
+            <label for="username">用户名:</label>
+            <input type="text" id="u" placeholder="请输入用户名" required>
+            <label for="password">密码:</label>
+            <input type="password" id="p" placeholder="请输入密码" required>
+            <button id ="login">登录</button>
+        </form>
+    </div>
+    <script>
+        var username;
+        var password;
+      $("#login").click(function(){
+        event.preventDefault(); // 阻止表单的默认提交行为
+        username = document.getElementById('u').value;
+        password = document.getElementById('p').value;
+        console.log("发送login")
+        axios({
+            method:"POST",
+            url:"http://124.71.159.84:8080/users/login",
+            data:{
+              "userName":username,
+              "password":password
+            }
+          }).then(response=>{
+            msg = response.data.msg;
+            code = response.data.code;
+            token = response.data.data;
+            localStorage.setItem("token",token);
+            localStorage.setItem("name",username);
+            window.location.href = "home.html";
+            alert(msg)
+          })
+          console.log("结束login")
+      });
+    </script>
+</body>
+ 
+</html>
+</body>
+</html>

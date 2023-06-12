@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.3.6/axios.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatRoom</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+        .header {
+            height: 5%;
+            width: 100%;
+            background-color: white;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid gray;
+        }
+        .header-left{
+            font-size: 26px;
+            color: #414141;
+            padding-left: 20px;
+            float: left;
+        }
+        .header-right{
+            float: right;
+            font-size: 26px;
+            color: #82839D;
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+        html{
+            height: 100%;
+            width: 100%;
+        }
+        body{
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden; 
+            /* 隐藏水平滚动条 */  
+            overflow-y: hidden; 
+            /* 显示垂直滚动条（需要时） */  
+        }
+        .side{
+            /* display: flex; */
+            float: left;
+            width: 200px;
+            height: 100%;
+            background-color: #DEDEF4;
+            font-size: 26px;
+            justify-content: center;
+            flex-wrap:wrap;
+            text-align: center;
+        }
+        #app{
+            height: 93%;
+        }
+        .contact{
+            float: none;
+            width: 100%;
+            height: 50px;   
+            /* margin-bottom: 50px; */
+        }
+        .contact:hover{
+            float: none;
+            width: 100%;
+            height: 50px;
+            border-radius: 20px;    
+            background-color: #FDFDFD;
+        }
+        .main{
+            background-color: #E9EDF7;
+            width: 100%;
+            height: 100%;
+        }
+        .input{
+            padding-left: 150px;
+            width: 650px;
+            float: left;
+        }
+        .chat{
+            background-color: white;
+            height: 75%;
+            width: 850px;
+            margin-left: 350px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            /* float: left; */
+        }
+        .block{
+            background-color: #E9EDF7;
+            width: 150px;
+            height: 75%;
+            float: left;
+        }
+        .content{   
+            width: 900px;
+        }
+        input{
+            width: 50px; height: 160px; float: left;
+        }
+    </style>
+</head>
+<body>
+        
+        <div id = "app">
+            <div class="header">
+                <div class="header-left"><img src="photo/logo.png" style="width: 30px;height: 30px;">Web网聊</div>
+                <div id = "exit" class="header-right" @click="exit()">退出应用</div>
+                <div style="color: aqua;" class="header-right">{{name}}</div>
+                <div id = "home" class="header-right" @click="home()">主页</div>
+            </div>
+            <div class="side">
+                <div class="contact" v-for="item in contacts" @click="chooseContact(item)">
+                    {{item}}
+                </div>
+            </div>
+            <div class="main">
+                <div class="chat">
+                    <!-- 聊天内容 -->
+                    <div class="content" v-for="item in history" :key="item" :start-index="0">
+                        <div>{{item.split(':')[0]}}:</div>
+                        <!-- <el-image style="width: 100px; height: 100px" :src="iitem.split(':')[1].substr(7)" :fit="fill"></el-image>   -->
+                        <img v-if="item.split(':')[1].includes('imgUrl')" v-bind:src="item.split(':')[1].substr(7)"/>   
+                        <div style="overflow-wrap: break-word; width: 825px;" v-else>{{item.split(':')[1]}}</div>
+                        <div style="width: 20px;border-bottom: solid black;height: 20px;width: 825px;"></div>
+                    </div> 
+                </div>
+                <div class="input">
+                    <el-input type="textarea" :rows="7" placeholder="请输入内容" v-model="textarea"></el-input>
+                </div>
+                <input accept=".jpg, .jpeg, .png, .gif" style="width: 100px; height: 160px; float: left;border: solid brown 2px;" type="file" id="f" ref="fileInput">
+                <button style="width: 50px; height: 160px; float: left;" @click="handleUpload">上传图片</button>
+                <button style="width: 50px; height: 160px; float: left;" @click="sendMessage()">发送</button>
+            </div>
+        </div>
+    <script>
+        var app = new Vue({
+            el: '#app', 
+            data() {
+                return{
+                    token:null,
+                    name:"",
+                    now:null,
+                    contacts:[],
+                    history:[],
+                    textarea: '',
+                    socket:null,
+                    img:null,
+                }
+            },
+            created() {
+                this.name = localStorage.getItem("name")
+                this.token = localStorage.getItem("token");
+                fetch('http://124.71.159.84:8080/users/friends', {
+                    headers: {
+                    'Content-Type': 'application/json',
+                    'token': this.token
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                    this.contacts = data.data;
+                    this.now = this.contacts[0];
+                    console.log(this.contacts)
+                    //alert(this.contacts[0] + this.contacts[1]);
+                    //this.chooseContact(this.now); 
+                    this.openSocket();
+                    })
+                    .catch(error => {
+                    console.error('发生错误：', error);
+                    });
+            },
+            mounted() { 
+            },
+            destroyed() {
+            },
+            methods:{
+                home(){
+                    window.location.href = "home.html";
+                },
+                exit(){
+                    window.location.href='about:blank';
+                    window.close()
+                },
+                addmsg(friend,text){
+                    var str = localStorage.getItem(friend);
+                    str += "|" + friend + ":" + text;
+                    localStorage.setItem(friend,str);
+                    if(this.now == friend){
+                        this.chooseContact(friend)
+                    }
+                },
+                chooseContact(item){
+                    this.now = item;
+                    if(localStorage.getItem(item) == null){
+                        localStorage.setItem(item,item + ":我们已经是好友啦,开始聊天吧");
+                    }
+                    const chatHistory = localStorage.getItem(item).split('|');
+                    this.history = chatHistory; // 更新history属性的值
+                    //alert("显示" + item + "的聊天记录");
+                    console.log(this.history);
+                    console.log(this.contacts);
+                },
+                goBack() {
+                    alert('go back');
+                },
+                handleUpload(){
+                    const reader = new FileReader();
+                    from = this.name;
+                    to = this.now;
+                    key = this.token;
+                    friend = this.now
+                    i = this.name
+                    var ff = this.chooseContact;
+                    reader.onload = function(e) {
+                    //alert(reader.result);
+                    axios({
+                    headers:{
+                        'Content-Type': 'application/json',
+                        'token': key
+                    },
+                    method:"POST",
+                    url:"http://124.71.159.84:8080/img",
+                    data:{
+                        'content':reader.result,
+                        'from':from,
+                        'to':to
+                    }
+                    }).then(response=>{
+                        var url = response.data.data;
+                        var str = localStorage.getItem(friend);
+                        str += "|" + i + ":" + "imgUrl@" + url;
+                        localStorage.setItem(friend,str);
+                        ff(friend)
+                        var element = document.getElementsByClassName("chat");
+                        element.scrolllTop = element.scrollHeight;
+                    })
+                    };
+                    reader.readAsDataURL(f.files[0]);
+                },
+                openSocket() {
+                    if (typeof WebSocket == "undefined") {
+                        console.log("您的浏览器不支持WebSocket");
+                    } else {
+                        console.log("您的浏览器支持WebSocket");
+                        var socketUrl = "ws://124.71.159.84:8080/imserver/" + this.name;
+                        if (this.socket != null) {
+                            this.socket.close();
+                            this.socket = null;
+                        }
+                        this.socket = new WebSocket(socketUrl);
+                        //打开事件
+                        this.socket.onopen = function() {
+                            console.log("websocket已打开");
+                        };
+                        this.socket.onmessage = (msg) => {
+                            console.log(msg.data);
+                            var tmp = JSON.parse(msg.data);
+                            var friend = tmp.user;
+                            var text = tmp.content;
+                            this.addmsg(friend,text);
+                            var element = document.getElementsByClassName("chat");
+                            element.scrolllTop = element.scrollHeight;
+                        };
+                        //关闭事件
+                        this.socket.onclose = function() {
+                            console.log("websocket已关闭");
+                        };
+                        //发生了错误事件
+                        this.socket.onerror = function() {
+                            alert("websocket发生了错误");
+                        };
+                    }
+                },
+                sendMessage() {
+                if(this.textarea == ''){
+                    return;
+                }
+                if (typeof WebSocket == "undefined") {
+                    console.log("您的浏览器不支持WebSocket");
+                } else {
+                    console.log("您的浏览器支持WebSocket");
+                    //alert("准备发送" + this.textarea)
+                    this.socket.send('{"toUserName":"' + this.now + '","content":"' + this.textarea + '","user":"' + this.name + '"}');
+                    this.addmsg(this.name,this.textarea);
+                    var friend = this.now;
+                    var str = localStorage.getItem(friend);
+                    str += "|" + this.name + ":" + this.textarea;
+                    localStorage.setItem(friend,str);
+                    this.chooseContact(friend)
+                    var element = document.getElementsByClassName("chat");
+                    element.scrolllTop = element.scrollHeight;
+                    this.textarea = "";
+                }
+            }
+        }
+        })
+    </script>
+</body>
+</html>

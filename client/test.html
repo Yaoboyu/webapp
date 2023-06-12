@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+        <div id = "app">  
+            {{ wordSelect }}
+        </div>
+        
+      <script>  
+      var app = new Vue( { 
+        el: '#app', 
+        name: 'name',
+        data() {  
+          return {  
+            roleList: [],
+            historyList: [],
+            role: {},
+            history: [],
+            user: {},
+            modelOptions: [
+                {
+                    value: 'gpt-3.5-turbo',
+                    label: 'gpt-3.5-turbo'
+                },
+                {
+                value: 'gpt-4.0',
+                label: 'gpt-4.0'
+                }
+            ],
+                    currentRoleId: '',
+                    currentRole: {},
+                    currentHistoryId: '',
+                    chatting: '',
+                    roleMenuVis: true,
+                    addRoleDialogVis: false,
+                    addRoleDialogAction: '1',
+                    currentAddRoleDialogSelect: 1,
+                    updateRoleDialogVis: false,
+                    updateRoleDialogAction: '1',
+                    currentUpdateRoleDialogSelect: 1,
+                    setAvaterDialogVis: false,
+                    historyDialogVis: false,
+            wordSelect: 'AI',
+            title: 'Hello World',  
+            content: 'This is a Vue component.'  
+          }  
+        }  
+      }  )
+      </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习界面</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+</head>
+
+<body>
+    <div id = "schedule"></div>
+    <div id = 'word'></div>
+    <button id = "a">学会</button>
+    <button id = "b">不熟</button>
+    <button id = "c">不会</button>
+    <button id = "d">返回</button>
+    <div>这里是注释内容:这些单词1,2,3最后会替换成向后端发送请求的内容,每当用户面对一个单词的时候,会有学会,不熟,不会的三个按钮可供选择.点击学会:单词进度++;点击不熟:展示单词例句;点击学会,展示单词例句+释义;并且当点击不熟或者不会按钮之后,必须要隐藏之前的三个按钮,重新出现一个返回按钮</div>
+</body>
+<script>
+    
+    var word = ["单词1","单词2","单词3","单词4","单词5","单词6","单词7","单词8","单词9","单词10"]
+    var l = word.length
+    var now = 0
+    var sen = ""
+    var mean = ""
+    function fresh(){
+        $("#schedule").text("单词进度:" + now + '/' + l)
+        $("#word").text(word[0])
+    }
+    fresh()
+    $("#a").click(function(){
+        word.shift()
+        now++
+        fresh()
+    })
+    $("#b").click(function(){
+        sen = "例句" // 这里应该向后端发送请求获取例句
+        $("#word").text(sen)
+        word.push(word[0])
+        word.shift()
+    })
+    $("#c").click(function(){
+        sen = "例句" // 这里应该向后端发送请求获取例句
+        mean = "释义" // 这里应该向后端发送请求获取释义
+        $("#word").text(sen + "\n" + mean)
+        word.push(word[0])
+        word.shift()
+    })
+    $("#d").click(function(){
+        fresh()
+    })
+    
+</script>
+</html>

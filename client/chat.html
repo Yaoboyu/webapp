@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传图片界面</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+</head>
+
+<body>
+    <input type="file" id="imageInput" accept="image/*">
+    <button type="button" id="uploadButton">上传</button>
+    <button type="button" id="btn">刷新</button>
+    <p id = "content">
+    </p>
+</body>
+<script>
+   var imageBase64 = "";
+    $(document).ready(function() {
+        $("#uploadButton").click(function() {
+            var imageInput = $("#imageInput")[0];
+            var imageFile = imageInput.files[0];
+            if (imageFile.size > 64 * 1024) {
+            alert("图片文件过大，上传失败");
+            return;
+        }
+        var reader = new FileReader();
+        reader.readAsDataURL(imageFile);
+        reader.onloadend = function() {
+        imageBase64 = reader.result;
+        };
+        });
+    });
+    var con = "nihao"
+    $("#btn").click(function(){
+        if(imageBase64 != ""){
+            $("#content").append("<img src=" + '"' + imageBase64 + '"' + '/>')
+        }else{
+            $("#content").append(con)
+        }
+    })
+</script>
+</html>
